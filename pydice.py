@@ -39,6 +39,17 @@ if(__version_info__[3]!=None):
 if(__version_info__[3]==None):
  __version__ = str(__version_info__[0])+"."+str(__version_info__[1])+"."+str(__version_info__[2]);
 
+def GetItemFromList(listvar, listval, defval):
+ retval = None;
+ try:
+  retval = listvar.get(listval, defval);
+ except AttributeError:
+  try:
+   retval = listvar[listval];
+  except IndexError:
+   retval = defval;
+ return retval;
+
 def GetMinValues(DiceList, DiceNum=5):
  if type(DiceList) is not list:
   return False;
@@ -95,7 +106,7 @@ def GetMaxValues(DiceList, DiceNum=5):
   MaxValList.append(value);
  return MaxValList;
 
-def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
+def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  if(len(re.findall("^([\-]?[0-9]+)$", str(MinNum)))<1):
   MinNum = 1;
  try:
@@ -108,7 +119,7 @@ def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
   MaxNum = int(MaxNum);
  except ValueError:
   return [False];
- if(len(re.findall("^([\-]?[1-4]+)$", str(RandType)))<1):
+ if(len(re.findall("^([\-]?[1-5]+)$", str(RandType)))<1):
   RandType = 1;
  try:
   RandType = int(RandType)
@@ -122,8 +133,8 @@ def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
  RandType = int(RandType);
  if(RandType<1):
   RandType = 1;
- if(RandType>4):
-  RandType = 4;
+ if(RandType>5):
+  RandType = 5;
  if(RandType==1):
   DiceRollValue = random.randint(MinNum, MaxNum);
  if(RandType==2):
@@ -134,23 +145,32 @@ def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
   DiceRollValue = randtype.randint(MinNum, MaxNum);
  if(RandType==4):
   DiceRollValue = random.randrange(MinNum, MaxNum + 1);
+ if(RandType==5):
+  icount = 1;
+  ilist = [];
+  while(icount<=MaxNum):
+   ilist.append(icount);
+   icount += 1;
+  DiceRollValue = random.choice(ilist);
+ if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
+  DiceRollValue = GetItemFromList(DiceArray, DiceRollValue, DiceRollValue);
  return [DiceRollValue];
 
-def RandomDieRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
- return RandomDiceRoll(MinNum, MaxNum, RandType, RandSeed);
+def RandomDieRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomDiceRoll(MinNum, MaxNum, RandType, RandSeed, DiceArray);
 
-def RandomDiceRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed()):
+def RandomDiceRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  if(MaxNum>0):
-  return [RandomDiceRoll(1, MaxNum, RandType, RandSeed)[0]];
+  return [RandomDiceRoll(1, MaxNum, RandType, RandSeed, DiceArray)[0]];
  if(MaxNum<0):
-  return [RandomDiceRoll(MaxNum, -1, RandType, RandSeed)[0]];
+  return [RandomDiceRoll(MaxNum, -1, RandType, RandSeed, DiceArray)[0]];
  if(MaxNum==0):
-  return [RandomDiceRoll(MaxNum, 1, RandType, RandSeed)[0]];
+  return [RandomDiceRoll(MaxNum, 1, RandType, RandSeed, DiceArray)[0]];
 
-def RandomDieRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed()):
- return RandomDiceRollAlt(MaxNum, RandType, RandSeed);
+def RandomDieRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
  if not isinstance(MinNum, list):
   MinNum = [MinNum];
  if not isinstance(MaxNum, list):
@@ -164,14 +184,14 @@ def RandomMultiDiceRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed
  CountNumOfDice = 0;
  DiceRolls = [];
  while(CountNumOfDice<NumOfDice):
-  DiceRolls.append(RandomDiceRoll(MinNum[CountNumOfDice], MaxNum[CountNumOfDice], RandType, RandSeed)[0]);
+  DiceRolls.append(RandomDiceRoll(MinNum[CountNumOfDice], MaxNum[CountNumOfDice], RandType, RandSeed, DiceArray)[0]);
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomMultiDieRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRoll(MinNum, MaxNum, RandType, RandSeed);
+def RandomMultiDieRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRoll(MinNum, MaxNum, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  dieminv = [];
  diemaxv = [];
  tree = cElementTree.ElementTree(file=DiceStrFile);
@@ -194,12 +214,12 @@ def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
     diemax = "6";
    dieminv.append(diemin);
    diemaxv.append(diemax);
- return RandomMultiDiceRoll(dieminv, diemaxv, RandType, RandSeed);
+ return RandomMultiDiceRoll(dieminv, diemaxv, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
  if not isinstance(MaxNum, list):
   MaxNum = [MaxNum];
  NumOfDice = len(MaxNum);
@@ -217,13 +237,13 @@ def RandomMultiDiceRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed()):
    DiceRollsMin.append(MaxNum[CountNumOfDice]);
    DiceRollsMax.append(1);
   CountNumOfDice = CountNumOfDice + 1;
- DiceRolls = RandomMultiDiceRoll(DiceRollsMin, DiceRollsMax, RandType, RandSeed);
+ DiceRolls = RandomMultiDiceRoll(DiceRollsMin, DiceRollsMax, RandType, RandSeed, DiceArray);
  return DiceRolls;
 
-def RandomMultiDieRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollAlt(MaxNum, RandType, RandSeed);
+def RandomMultiDieRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollAltByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollAltByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diemaxv = [];
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -237,12 +257,12 @@ def RandomMultiDiceRollAltByXML(DiceStrFile, RandType=1, RandSeed=random.seed())
    if(len(re.findall("^([\-]?[0-9]+)$", diemax))<1):
     diemax = "6";
    diemaxv.append(diemax);
- return RandomMultiDiceRollAlt(diemaxv, RandType, RandSeed);
+ return RandomMultiDiceRollAlt(diemaxv, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollAltByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollAltByXML(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollAltByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollAltByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiSameDiceRoll(NumOfDice=1, MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
+def RandomMultiSameDiceRoll(NumOfDice=1, MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  CountNumOfDice = 0;
  DiceRollsMin = [];
  DiceRollsMax = [];
@@ -250,13 +270,13 @@ def RandomMultiSameDiceRoll(NumOfDice=1, MinNum=1, MaxNum=6, RandType=1, RandSee
   DiceRollsMin.append(MinNum);
   DiceRollsMax.append(MaxNum);
   CountNumOfDice = CountNumOfDice + 1;
- DiceRolls = RandomMultiDiceRoll(DiceRollsMin, DiceRollsMax, RandType, RandSeed);
+ DiceRolls = RandomMultiDiceRoll(DiceRollsMin, DiceRollsMax, RandType, RandSeed, DiceArray);
  return DiceRolls;
 
-def RandomMultiSameDieRoll(NumOfDie=1, MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
- return RandomMultiSameDiceRoll(NumOfDie, MinNum, MaxNum, RandType, RandSeed);
+def RandomMultiSameDieRoll(NumOfDie=1, MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiSameDiceRoll(NumOfDie, MinNum, MaxNum, RandType, RandSeed, DiceArray);
 
-def RandomMultiSameDiceRollAlt(NumOfDice=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
+def RandomMultiSameDiceRollAlt(NumOfDice=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  CountNumOfDice = 0;
  DiceRollsMin = [];
  DiceRollsMax = [];
@@ -271,13 +291,13 @@ def RandomMultiSameDiceRollAlt(NumOfDice=1, MaxNum=6, RandType=1, RandSeed=rando
    DiceRollsMin.append(MaxNum);
    DiceRollsMax.append(1);
   CountNumOfDice = CountNumOfDice + 1;
- DiceRolls = RandomMultiDiceRoll(DiceRollsMin, DiceRollsMax, RandType, RandSeed);
+ DiceRolls = RandomMultiDiceRoll(DiceRollsMin, DiceRollsMax, RandType, RandSeed, DiceArray);
  return DiceRolls;
 
-def RandomMultiSameDieRollAlt(NumOfDie=1, MaxNum=6, RandType=1, RandSeed=random.seed()):
- return RandomMultiSameDiceRollAlt(NumOfDie, MaxNum, RandType, RandSeed);
+def RandomMultiSameDieRollAlt(NumOfDie=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiSameDiceRollAlt(NumOfDie, MaxNum, RandType, RandSeed, DiceArray);
 
-def RandomDiceRollByPosition(DiceStr="0,0,0,0,0,1", RandType=1, RandSeed=random.seed()):
+def RandomDiceRollByPosition(DiceStr="0,0,0,0,0,1", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStrList = DiceStr.split(",");
  NumOfDice = len(DiceStrList);
@@ -286,14 +306,15 @@ def RandomDiceRollByPosition(DiceStr="0,0,0,0,0,1", RandType=1, RandSeed=random.
  while(CountNumOfDice<NumOfDice):
   CurDiceNum = CountNumOfDice + 1;
   if(int(DiceStrList[CountNumOfDice])>0):
-   DiceRolls = DiceRolls + RandomMultiSameDiceRollAlt(int(DiceStrList[CountNumOfDice]), CurDiceNum, RandType, RandSeed);
+   DiceRollsTmp = RandomMultiSameDiceRollAlt(int(DiceStrList[CountNumOfDice]), CurDiceNum, RandType, RandSeed, DiceArray);
+   DiceRolls.append(DiceRollsTmp);
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomDieRollByPosition(DieStr="0,0,0,0,0,1", RandType=1, RandSeed=random.seed()):
- return RandomDiceRollByPosition(DieStr, RandType, RandSeed);
+def RandomDieRollByPosition(DieStr="0,0,0,0,0,1", RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomDiceRollByPosition(DieStr, RandType, RandSeed, DiceArray);
 
-def RandomDiceRollByString(DiceStr="d6", RandType=1, RandSeed=random.seed()):
+def RandomDiceRollByString(DiceStr="d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStr = DiceStr.lower();
  DiceStr = re.sub("c", "d2", DiceStr);
@@ -303,14 +324,14 @@ def RandomDiceRollByString(DiceStr="d6", RandType=1, RandSeed=random.seed()):
  DiceRolls = [];
  while(CountNumOfDice<NumOfDice):
   GetDiceRoll = int(re.findall("d([0-9]+)", DiceStrList[CountNumOfDice])[0]);
-  DiceRolls = DiceRolls + RandomDiceRollAlt(GetDiceRoll, RandType, RandSeed);
+  DiceRolls = DiceRolls + RandomDiceRollAlt(GetDiceRoll, RandType, RandSeed, DiceArray);
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomDieRollByString(DieStr="d6", RandType=1, RandSeed=random.seed()):
- return RandomDiceRollByString(DieStr, RandType, RandSeed);
+def RandomDieRollByString(DieStr="d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomDiceRollByString(DieStr, RandType, RandSeed, DiceArray);
 
-def RandomDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -326,12 +347,12 @@ def RandomDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
    if(len(re.findall("^([\-]?[0-9]+)$", diemax))<1):
     diemax = "6";
    diestr = "d"+diemax;
- return RandomDiceRollByString(diestr, RandType, RandSeed);
+ return RandomDiceRollByString(diestr, RandType, RandSeed, DiceArray);
 
-def RandomDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomDiceRollByXML(DieStrFile, RandType, RandSeed);
+def RandomDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStr = DiceStr.lower();
  DiceStr = re.sub("([0-9]*)c", "\\1d2", DiceStr);
@@ -354,7 +375,7 @@ def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(
     GetPreDiceRoll[2] = "";
   GetPreDiceRollList = [];
   if(GetNumDice>0):
-   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetDiceRoll, RandType, RandSeed);
+   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetDiceRoll, RandType, RandSeed, DiceArray);
   if(GetPreDiceRoll[2]==""):
    GetDiceRollList = GetPreDiceRollList;
   else:
@@ -368,10 +389,10 @@ def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomMultiDieRollByString(DieStr="1d6", RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollByString(DieStr, RandType, RandSeed);
+def RandomMultiDieRollByString(DieStr="1d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollByString(DieStr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -405,12 +426,12 @@ def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
    if(len(re.findall("^([0-9]+)$", dienum))<1):
     dienum = "1";
    diestr = diestr+dienum+"c";
- return RandomMultiDiceRollByString(diestr, RandType, RandSeed);
+ return RandomMultiDiceRollByString(diestr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStr = DiceStr.lower();
  DiceStr = re.sub("c([\:]?[0-9])", "d2\\1", DiceStr);
@@ -434,7 +455,7 @@ def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.s
     GetPreDiceRoll[2] = "";
   GetPreDiceRollList = [];
   if(GetNumDice>0):
-   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetDiceRoll, RandType, RandSeed);
+   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetDiceRoll, RandType, RandSeed, DiceArray);
   if(GetPreDiceRoll[2]==""):
    GetDiceRollList = GetPreDiceRollList;
   else:
@@ -448,10 +469,10 @@ def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.s
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomMultiDieRollByStringAlt(DieStr="d6:1", RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollByStringAlt(DieStr, RandType, RandSeed);
+def RandomMultiDieRollByStringAlt(DieStr="d6:1", RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollByStringAlt(DieStr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollByXMLAlt(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollByXMLAlt(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -474,12 +495,12 @@ def RandomMultiDiceRollByXMLAlt(DiceStrFile, RandType=1, RandSeed=random.seed())
    if(len(re.findall("^([0-9]+)$", dienum))<1):
     dienum = "1";
    diestr = diestr+"d"+diemax+":"+dienum;
- return RandomMultiDiceRollByStringAlt(diestr, RandType, RandSeed);
+ return RandomMultiDiceRollByStringAlt(diestr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollByXMLAlt(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollByXMLAlt(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollByXMLAlt(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollByXMLAlt(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStr = DiceStr.lower();
  DiceStr = re.sub("([0-9]*)c", "\\1d1:2", DiceStr);
@@ -509,9 +530,9 @@ def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=rand
   GetPreDiceRollList = [];
   if(GetNumDice>0):
    if(GetMaxDiceRoll==""):
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed, DiceArray);
    else:
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed, DiceArray);
   if(GetPreDiceRoll[3]==""):
    GetDiceRollList = GetPreDiceRollList;
   else:
@@ -525,10 +546,10 @@ def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=rand
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomMultiDieRollMinMaxByString(DieStr="1d1:6", RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollMinMaxByString(DieStr, RandType, RandSeed);
+def RandomMultiDieRollMinMaxByString(DieStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollMinMaxByString(DieStr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -592,12 +613,12 @@ def RandomMultiDiceRollMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed
    if(len(re.findall("^([0-9]+)$", dienum))<1):
     dienum = "1";
    diestr = diestr+dienum+"c";
- return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed);
+ return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollMinMaxByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollMinMaxByXML(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollMinMaxByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollMinMaxByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStr = DiceStr.lower();
  DiceStr = re.sub("([0-9]*)c([\+\-\*\/]?[0-9\+\-\*\/]*)", "\\1d2\\2", DiceStr);
@@ -625,7 +646,7 @@ def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=rand
   GetPreDiceRollList = [];
   GetSubDiceRollList = [];
   if(GetNumDice>0):
-   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetNewDiceRoll, RandType, RandSeed);
+   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetNewDiceRoll, RandType, RandSeed, DiceArray);
   if(GetPreDiceRoll[2]==""):
    GetSubDiceRollList = GetPreDiceRollList;
   else:
@@ -665,7 +686,7 @@ def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=rand
 def RandomMultiDieRollNotationByString(DieStr="1d6", RandType=1, RandSeed=random.seed()):
  return RandomMultiDiceRollNotationByString(DieStr, RandType, RandSeed);
 
-def RandomMultiDiceRollNotationByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollNotationByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -695,12 +716,12 @@ def RandomMultiDiceRollNotationByXML(DiceStrFile, RandType=1, RandSeed=random.se
    if(len(re.findall("^([\+\-\*\/]?[0-9\+\-\*\/]*)$", dieexp))<1):
     dieexp = "";
    diestr = diestr+dienum+"d"+diemax+dieexp;
- return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed);
+ return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollNotationByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollNotationByXML(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollNotationByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollNotationByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
  DiceStr = DiceStr.lower();
  DiceStr = re.sub("([0-9]*)c([\+\-\*\/]?[0-9\+\-\*\/]*)", "\\1d1:2\\2", DiceStr);
@@ -735,9 +756,9 @@ def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandS
   GetSubDiceRollList = [];
   if(GetNumDice>0):
    if(GetMaxDiceRoll==""):
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed, DiceArray);
    else:
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed, DiceArray);
   if(GetPreDiceRoll[3]==""):
    GetSubDiceRollList = GetPreDiceRollList;
   else:
@@ -774,10 +795,10 @@ def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandS
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
-def RandomMultiDieRollNotationMinMaxByString(DieStr="1d1:6", RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollNotationMinMaxByString(DieStr, RandType, RandSeed);
+def RandomMultiDieRollNotationMinMaxByString(DieStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollNotationMinMaxByString(DieStr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDiceRollNotationMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed()):
+def RandomMultiDiceRollNotationMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
  tree = cElementTree.ElementTree(file=DiceStrFile);
  root = tree.getroot();
@@ -861,10 +882,10 @@ def RandomMultiDiceRollNotationMinMaxByXML(DiceStrFile, RandType=1, RandSeed=ran
    if(len(re.findall("^([\+\-\*\/]?[0-9\+\-\*\/]*)$", dieexp))<1):
     dieexp = "";
    diestr = diestr+dienum+"d"+diemin+":"+diemax+dieexp;
- return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed);
+ return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
 
-def RandomMultiDieRollNotationMinMaxByXML(DieStrFile, RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollNotationMinMaxByXML(DieStrFile, RandType, RandSeed);
+def RandomMultiDieRollNotationMinMaxByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
+ return RandomMultiDiceRollNotationMinMaxByXML(DieStrFile, RandType, RandSeed, DiceArray);
 
 def RandomCoinFlip(ReturnValType="int", RandType=1, RandSeed=random.seed()):
  ReturnValType = ReturnValType.lower();
