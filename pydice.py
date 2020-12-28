@@ -108,7 +108,7 @@ def GetMaxValues(DiceList, DiceNum=5):
 
 def GetDictValueFromDiceNumber(DiceValue, DiceArray={}):
  DiceRollValue = DiceArray.get(DiceValue, DiceValue);
- return DiceRollValue;
+ return [DiceRollValue];
 
 def GetDictValueFromDiceList(DiceList, DiceArrayList=[{}]):
  DiceRolls = [];
