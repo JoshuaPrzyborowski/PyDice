@@ -911,3 +911,16 @@ def RandomMultiCoinFlip(NumOfCoins=1, ReturnValType="int", RandType=1, RandSeed=
   CoinFlipValue = CoinFlipValue + RandomCoinFlip(ReturnValType, RandType, RandSeed);
   CountNumOfCoins = CountNumOfCoins + 1;
  return CoinFlipValue;
+
+def GetDictValueFromDiceNumber(DiceValue, DiceArray={}):
+ DiceRollValue = DiceArray.get(DiceValue, DiceValue);
+ return DiceRollValue;
+
+def GetDictValueFromDiceList(DiceList, DiceArray=[{}]):
+ DiceRolls = [];
+ NumOfDice = len(DiceList);
+ CountNumOfDice = 0;
+ while(CountNumOfDice<NumOfDice):
+  DiceRolls.append(GetDictValueFromDiceNumber(DiceList[CountNumOfDice], DiceArrayList[CountNumOfDice]));
+  CountNumOfDice = CountNumOfDice + 1;
+ return DiceRolls;
