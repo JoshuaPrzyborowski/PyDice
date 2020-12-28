@@ -110,7 +110,7 @@ def GetDictValueFromDiceNumber(DiceValue, DiceArray={}):
  DiceRollValue = DiceArray.get(DiceValue, DiceValue);
  return DiceRollValue;
 
-def GetDictValueFromDiceList(DiceList, DiceArray=[{}]):
+def GetDictValueFromDiceList(DiceList, DiceArrayList=[{}]):
  DiceRolls = [];
  NumOfDice = len(DiceList);
  CountNumOfDice = 0;
