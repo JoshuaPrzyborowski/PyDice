@@ -27,7 +27,7 @@ except ImportError:
 __program_name__ = "PyDice-Roll";
 __project__ = __program_name__;
 __project_url__ = "https://gist.github.com/JoshuaPrzyborowski";
-__version_info__ = (0, 2, 5, "RC 1", 1);
+__version_info__ = (0, 3, 0, "RC 1", 1);
 __version_date_info__ = (2016, 10, 12, "RC 1", 1);
 __version_date__ = str(__version_date_info__[0])+"."+str(__version_date_info__[1]).zfill(2)+"."+str(__version_date_info__[2]).zfill(2);
 if(__version_info__[4]!=None):
