@@ -115,7 +115,7 @@ def GetDictValueFromDiceList(DiceList, DiceArrayList=[{}]):
  NumOfDice = len(DiceList);
  CountNumOfDice = 0;
  while(CountNumOfDice<NumOfDice):
-  DiceRolls.append(GetDictValueFromDiceNumber(DiceList[CountNumOfDice], DiceArrayList[CountNumOfDice]));
+  DiceRolls.append(GetDictValueFromDiceNumber(DiceList[CountNumOfDice], DiceArrayList[CountNumOfDice])[0]);
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
