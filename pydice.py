@@ -174,11 +174,12 @@ def RandomDieRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceAr
 
 def RandomDiceRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  if(MaxNum>0):
-  return [RandomDiceRoll(1, MaxNum, RandType, RandSeed, DiceArray)[0]];
+  DiceRollValue = RandomDiceRoll(1, MaxNum, RandType, RandSeed, DiceArray)[0];
  if(MaxNum<0):
-  return [RandomDiceRoll(MaxNum, -1, RandType, RandSeed, DiceArray)[0]];
+  DiceRollValue = RandomDiceRoll(MaxNum, -1, RandType, RandSeed, DiceArray)[0];
  if(MaxNum==0):
-  return [RandomDiceRoll(MaxNum, 1, RandType, RandSeed, DiceArray)[0]];
+  DiceRollValue = RandomDiceRoll(MaxNum, 1, RandType, RandSeed, DiceArray)[0];
+ return [DiceRollValue];
 
 def RandomDieRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  return RandomDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
