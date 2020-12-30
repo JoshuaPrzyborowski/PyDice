@@ -10,10 +10,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2016 Game Maker 2k - https://github.com/GameMaker2k
-    Copyright 2016 Joshua Przyborowski - https://github.com/JoshuaPrzyborowski
+    Copyright 2016-2020 Game Maker 2k - https://github.com/GameMaker2k
+    Copyright 2016-2020 Joshua Przyborowski - https://github.com/JoshuaPrzyborowski
 
-    $FileInfo: pydice.py - Last Update: 10/12/2016 Ver. 0.2.5 RC 1 - Author: joshuatp $
+    $FileInfo: pydice.py - Last Update: 10/12/2020 Ver. 0.3.0 RC 1 - Author: joshuatp $
 '''
 
 from __future__ import division, absolute_import, print_function;
@@ -107,8 +107,10 @@ def GetMaxValues(DiceList, DiceNum=5):
  return MaxValList;
 
 def GetDictValueFromDiceNumber(DiceValue, DiceArray={}):
+ DiceRolls = [];
  DiceRollValue = GetItemFromList(DiceArray, DiceValue, DiceValue);
- return [DiceRollValue];
+ DiceRolls.append(DiceRollValue);
+ return DiceRolls;
 
 def GetDictValueFromDiceList(DiceList, DiceArrayList=[{}]):
  DiceRolls = [];
@@ -166,11 +168,12 @@ def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceA
    icount += 1;
   DiceRollValue = random.choice(ilist);
  if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
-  DiceRollValue = GetItemFromList(DiceArray, DiceRollValue, DiceRollValue);
+  DiceRollValue = GetDictValueFromDiceNumber(DiceRollValue, DiceArray);
  return [DiceRollValue];
 
 def RandomDieRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomDiceRoll(MinNum, MaxNum, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomDiceRoll(MinNum, MaxNum, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomDiceRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  if(MaxNum>0):
@@ -182,7 +185,8 @@ def RandomDiceRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=No
  return [DiceRollValue];
 
 def RandomDieRollAlt(MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
  if not isinstance(MinNum, list):
@@ -203,7 +207,8 @@ def RandomMultiDiceRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed
  return DiceRolls;
 
 def RandomMultiDieRoll(MinNum=[1], MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRoll(MinNum, MaxNum, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRoll(MinNum, MaxNum, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  dieminv = [];
@@ -228,10 +233,12 @@ def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), Di
     diemax = "6";
    dieminv.append(diemin);
    diemaxv.append(diemax);
- return RandomMultiDiceRoll(dieminv, diemaxv, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRoll(dieminv, diemaxv, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
  if not isinstance(MaxNum, list):
@@ -255,7 +262,8 @@ def RandomMultiDiceRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceA
  return DiceRolls;
 
 def RandomMultiDieRollAlt(MaxNum=[6], RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollAlt(MaxNum, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollAltByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diemaxv = [];
@@ -271,10 +279,12 @@ def RandomMultiDiceRollAltByXML(DiceStrFile, RandType=1, RandSeed=random.seed(),
    if(len(re.findall("^([\-]?[0-9]+)$", diemax))<1):
     diemax = "6";
    diemaxv.append(diemax);
- return RandomMultiDiceRollAlt(diemaxv, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollAlt(diemaxv, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollAltByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollAltByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollAltByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiSameDiceRoll(NumOfDice=1, MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  CountNumOfDice = 0;
@@ -288,7 +298,8 @@ def RandomMultiSameDiceRoll(NumOfDice=1, MinNum=1, MaxNum=6, RandType=1, RandSee
  return DiceRolls;
 
 def RandomMultiSameDieRoll(NumOfDie=1, MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiSameDiceRoll(NumOfDie, MinNum, MaxNum, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiSameDiceRoll(NumOfDie, MinNum, MaxNum, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiSameDiceRollAlt(NumOfDice=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
  CountNumOfDice = 0;
@@ -309,7 +320,8 @@ def RandomMultiSameDiceRollAlt(NumOfDice=1, MaxNum=6, RandType=1, RandSeed=rando
  return DiceRolls;
 
 def RandomMultiSameDieRollAlt(NumOfDie=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiSameDiceRollAlt(NumOfDie, MaxNum, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiSameDiceRollAlt(NumOfDie, MaxNum, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomDiceRollByPosition(DiceStr="0,0,0,0,0,1", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -326,7 +338,8 @@ def RandomDiceRollByPosition(DiceStr="0,0,0,0,0,1", RandType=1, RandSeed=random.
  return DiceRolls;
 
 def RandomDieRollByPosition(DieStr="0,0,0,0,0,1", RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomDiceRollByPosition(DieStr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomDiceRollByPosition(DieStr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomDiceRollByString(DiceStr="d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -343,7 +356,8 @@ def RandomDiceRollByString(DiceStr="d6", RandType=1, RandSeed=random.seed(), Dic
  return DiceRolls;
 
 def RandomDieRollByString(DieStr="d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomDiceRollByString(DieStr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomDiceRollByString(DieStr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
@@ -361,10 +375,12 @@ def RandomDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArr
    if(len(re.findall("^([\-]?[0-9]+)$", diemax))<1):
     diemax = "6";
    diestr = "d"+diemax;
- return RandomDiceRollByString(diestr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomDiceRollByString(diestr, RandType, RandSeed, DiceArray);
+ return DiceRolls; 
 
 def RandomDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -404,7 +420,8 @@ def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(
  return DiceRolls;
 
 def RandomMultiDieRollByString(DieStr="1d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollByString(DieStr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByString(DieStr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
@@ -440,10 +457,12 @@ def RandomMultiDiceRollByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), Di
    if(len(re.findall("^([0-9]+)$", dienum))<1):
     dienum = "1";
    diestr = diestr+dienum+"c";
- return RandomMultiDiceRollByString(diestr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByString(diestr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -484,7 +503,8 @@ def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.s
  return DiceRolls;
 
 def RandomMultiDieRollByStringAlt(DieStr="d6:1", RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollByStringAlt(DieStr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByStringAlt(DieStr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollByXMLAlt(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
@@ -509,10 +529,12 @@ def RandomMultiDiceRollByXMLAlt(DiceStrFile, RandType=1, RandSeed=random.seed(),
    if(len(re.findall("^([0-9]+)$", dienum))<1):
     dienum = "1";
    diestr = diestr+"d"+diemax+":"+dienum;
- return RandomMultiDiceRollByStringAlt(diestr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByStringAlt(diestr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollByXMLAlt(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollByXMLAlt(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollByXMLAlt(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -561,7 +583,8 @@ def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=rand
  return DiceRolls;
 
 def RandomMultiDieRollMinMaxByString(DieStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollMinMaxByString(DieStr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollMinMaxByString(DieStr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
@@ -627,10 +650,12 @@ def RandomMultiDiceRollMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed
    if(len(re.findall("^([0-9]+)$", dienum))<1):
     dienum = "1";
    diestr = diestr+dienum+"c";
- return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollMinMaxByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollMinMaxByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollMinMaxByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -698,7 +723,8 @@ def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=rand
  return DiceRolls;
 
 def RandomMultiDieRollNotationByString(DieStr="1d6", RandType=1, RandSeed=random.seed()):
- return RandomMultiDiceRollNotationByString(DieStr, RandType, RandSeed);
+ DiceRolls = RandomMultiDiceRollNotationByString(DieStr, RandType, RandSeed);
+ return DiceRolls;
 
 def RandomMultiDiceRollNotationByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
@@ -730,10 +756,12 @@ def RandomMultiDiceRollNotationByXML(DiceStrFile, RandType=1, RandSeed=random.se
    if(len(re.findall("^([\+\-\*\/]?[0-9\+\-\*\/]*)$", dieexp))<1):
     dieexp = "";
    diestr = diestr+dienum+"d"+diemax+dieexp;
- return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollNotationByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollNotationByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollNotationByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
  DiceStr = DiceStr.strip();
@@ -810,7 +838,8 @@ def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandS
  return DiceRolls;
 
 def RandomMultiDieRollNotationMinMaxByString(DieStr="1d1:6", RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollNotationMinMaxByString(DieStr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollNotationMinMaxByString(DieStr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDiceRollNotationMinMaxByXML(DiceStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
  diestr = "";
@@ -896,10 +925,12 @@ def RandomMultiDiceRollNotationMinMaxByXML(DiceStrFile, RandType=1, RandSeed=ran
    if(len(re.findall("^([\+\-\*\/]?[0-9\+\-\*\/]*)$", dieexp))<1):
     dieexp = "";
    diestr = diestr+dienum+"d"+diemin+":"+diemax+dieexp;
- return RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollNotationMinMaxByString(diestr, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomMultiDieRollNotationMinMaxByXML(DieStrFile, RandType=1, RandSeed=random.seed(), DiceArray=None):
- return RandomMultiDiceRollNotationMinMaxByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ DiceRolls = RandomMultiDiceRollNotationMinMaxByXML(DieStrFile, RandType, RandSeed, DiceArray);
+ return DiceRolls;
 
 def RandomCoinFlip(ReturnValType="int", RandType=1, RandSeed=random.seed()):
  ReturnValType = ReturnValType.lower();
