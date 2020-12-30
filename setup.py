@@ -9,10 +9,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2011-2014 Game Maker 2k - https://github.com/GameMaker2k
-    Copyright 2011-2014 Kazuki Przyborowski - https://github.com/KazukiPrzyborowski
+    Copyright 2016-2020 Game Maker 2k - https://github.com/GameMaker2k
+    Copyright 2016-2020 Joshua Przyborowski - https://github.com/JoshuaPrzyborowski
 
-    $FileInfo: setup.py - Last Update: 6/3/2016 Ver. 2.7.15 RC 1 - Author: cooldude2k $
+    $FileInfo: setup.py - Last Update: 12/30/2020 Ver. 0.3.0 RC 1 - Author: cooldude2k $
 '''
 
 import re, os, sys, time, datetime, platform, pkg_resources;
@@ -21,7 +21,7 @@ from setuptools import setup, find_packages;
 install_requires = [];
 
 pygenbuildinfo = True;
-verinfofilename = os.path.realpath("."+os.path.sep+"upcean"+os.path.sep+"versioninfo.py");
+verinfofilename = os.path.realpath("."+os.path.sep+"pydice.py");
 verinfofile = open(verinfofilename, "r");
 verinfodata = verinfofile.read();
 verinfofile.close();
