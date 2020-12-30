@@ -415,7 +415,7 @@ def RandomMultiDiceRollByString(DiceStr="1d6", RandType=1, RandSeed=random.seed(
     GetDiceRollList = GetMinValues(GetPreDiceRollList, int(GetDiceAVGList[1]));
    if(GetDiceAVGList[0]=="h"):
     GetDiceRollList = GetMaxValues(GetPreDiceRollList, int(GetDiceAVGList[1]));
-   DiceRolls = DiceRolls + GetDiceRollList;
+  DiceRolls = DiceRolls + GetDiceRollList;
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
