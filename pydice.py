@@ -168,7 +168,7 @@ def RandomDiceRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceA
    icount += 1;
   DiceRollValue = random.choice(ilist);
  if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
-  DiceRollValue = GetDictValueFromDiceNumber(DiceRollValue, DiceArray);
+  DiceRollValue = GetDictValueFromDiceNumber(DiceRollValue, DiceArray)[0];
  return [DiceRollValue];
 
 def RandomDieRoll(MinNum=1, MaxNum=6, RandType=1, RandSeed=random.seed(), DiceArray=None):
