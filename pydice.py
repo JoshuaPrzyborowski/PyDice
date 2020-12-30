@@ -112,7 +112,16 @@ def GetDictValueFromDiceNumber(DiceValue, DiceArray={}):
  DiceRolls.append(DiceRollValue);
  return DiceRolls;
 
-def GetDictValueFromDiceList(DiceList, DiceArrayList=[{}]):
+def GetDictValueFromDiceList(DiceList, DiceArrayList={}):
+ DiceRolls = [];
+ NumOfDice = len(DiceList);
+ CountNumOfDice = 0;
+ while(CountNumOfDice<NumOfDice):
+  DiceRolls.append(GetDictValueFromDiceNumber(DiceList[CountNumOfDice], DiceArrayList)[0]);
+  CountNumOfDice = CountNumOfDice + 1;
+ return DiceRolls;
+
+def GetDictValueFromDiceListAlt(DiceList, DiceArrayList=[{}]):
  DiceRolls = [];
  NumOfDice = len(DiceList);
  CountNumOfDice = 0;
@@ -488,7 +497,7 @@ def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.s
     GetPreDiceRoll[2] = "";
   GetPreDiceRollList = [];
   if(GetNumDice>0):
-   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetDiceRoll, RandType, RandSeed, DiceArray);
+   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetDiceRoll, RandType, RandSeed, None);
   if(GetPreDiceRoll[2]==""):
    GetDiceRollList = GetPreDiceRollList;
   else:
@@ -498,6 +507,8 @@ def RandomMultiDiceRollByStringAlt(DiceStr="d6:1", RandType=1, RandSeed=random.s
     GetDiceRollList = GetMinValues(GetPreDiceRollList, int(GetDiceAVGList[1]));
    if(GetDiceAVGList[0]=="h"):
     GetDiceRollList = GetMaxValues(GetPreDiceRollList, int(GetDiceAVGList[1]));
+   if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
+    GetDiceRollList = GetDictValueFromDiceList(GetDiceRollList, DiceArray);
    DiceRolls = DiceRolls + GetDiceRollList;
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
@@ -566,9 +577,9 @@ def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=rand
   GetPreDiceRollList = [];
   if(GetNumDice>0):
    if(GetMaxDiceRoll==""):
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed, DiceArray);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed, None);
    else:
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed, DiceArray);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed, None);
   if(GetPreDiceRoll[3]==""):
    GetDiceRollList = GetPreDiceRollList;
   else:
@@ -578,6 +589,8 @@ def RandomMultiDiceRollMinMaxByString(DiceStr="1d1:6", RandType=1, RandSeed=rand
     GetDiceRollList = GetMinValues(GetPreDiceRollList, int(GetDiceAVGList[1]));
    if(GetDiceAVGList[0]=="h"):
     GetDiceRollList = GetMaxValues(GetPreDiceRollList, int(GetDiceAVGList[1]));
+  if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
+   GetDiceRollList = GetDictValueFromDiceList(GetDiceRollList, DiceArray);
   DiceRolls = DiceRolls + GetDiceRollList;
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
@@ -685,7 +698,7 @@ def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=rand
   GetPreDiceRollList = [];
   GetSubDiceRollList = [];
   if(GetNumDice>0):
-   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetNewDiceRoll, RandType, RandSeed, DiceArray);
+   GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetNewDiceRoll, RandType, RandSeed, None);
   if(GetPreDiceRoll[2]==""):
    GetSubDiceRollList = GetPreDiceRollList;
   else:
@@ -718,6 +731,8 @@ def RandomMultiDiceRollNotationByString(DiceStr="1d6", RandType=1, RandSeed=rand
     GetLastDiceRollList = GetMinValues(GetDiceRollList, int(GetPostDiceAVGList[1]));
    if(GetPostDiceAVGList[0]=="h"):
     GetLastDiceRollList = GetMaxValues(GetDiceRollList, int(GetPostDiceAVGList[1]));
+  if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
+   GetDiceRollList = GetDictValueFromDiceList(GetDiceRollList, DiceArray);
   DiceRolls = DiceRolls + GetLastDiceRollList;
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
@@ -798,9 +813,9 @@ def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandS
   GetSubDiceRollList = [];
   if(GetNumDice>0):
    if(GetMaxDiceRoll==""):
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed, DiceArray);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRollAlt(GetNumDice, GetMinDiceRoll, RandType, RandSeed, None);
    else:
-    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed, DiceArray);
+    GetPreDiceRollList = GetPreDiceRollList + RandomMultiSameDiceRoll(GetNumDice, GetMinDiceRoll, GetMaxDiceRoll, RandType, RandSeed, None);
   if(GetPreDiceRoll[3]==""):
    GetSubDiceRollList = GetPreDiceRollList;
   else:
@@ -833,6 +848,8 @@ def RandomMultiDiceRollNotationMinMaxByString(DiceStr="1d1:6", RandType=1, RandS
     GetLastDiceRollList = GetMinValues(GetDiceRollList, int(GetPostDiceAVGList[1]));
    if(GetPostDiceAVGList[0]=="h"):
     GetLastDiceRollList = GetMaxValues(GetDiceRollList, int(GetPostDiceAVGList[1]));
+  if(DiceArray is not None and (type(DiceArray) is list or type(DiceArray) is tuple or type(DiceArray) is dict)):
+   GetDiceRollList = GetDictValueFromDiceList(GetDiceRollList, DiceArray);
   DiceRolls = DiceRolls + GetLastDiceRollList;
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
