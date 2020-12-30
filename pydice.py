@@ -332,8 +332,7 @@ def RandomDiceRollByPosition(DiceStr="0,0,0,0,0,1", RandType=1, RandSeed=random.
  while(CountNumOfDice<NumOfDice):
   CurDiceNum = CountNumOfDice + 1;
   if(int(DiceStrList[CountNumOfDice])>0):
-   DiceRollsTmp = RandomMultiSameDiceRollAlt(int(DiceStrList[CountNumOfDice]), CurDiceNum, RandType, RandSeed, DiceArray);
-   DiceRolls.append(DiceRollsTmp);
+   DiceRolls = RandomMultiSameDiceRollAlt(int(DiceStrList[CountNumOfDice]), CurDiceNum, RandType, RandSeed, DiceArray);
   CountNumOfDice = CountNumOfDice + 1;
  return DiceRolls;
 
