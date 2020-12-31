@@ -978,10 +978,28 @@ def RandomCoinFlip(ReturnValType="int", RandType=1, RandSeed=random.seed()):
    CoinFlipValue = "Tails";
  return [CoinFlipValue];
 
+def RandomCoinFlipAlt(ReturnValType="int", RandType=1, RandSeed=random.seed()):
+ ReturnValType = ReturnValType.lower();
+ CoinFlipDict = None;
+ if(ReturnValType=="bool" or ReturnValType=="boolean"):
+  CoinFlipDict = {1: True, 2: False};
+ if(ReturnValType=="str" or ReturnValType=="string"):
+  CoinFlipDict = {1: "Heads" , 2: "Tails"};
+ CoinFlipValue = RandomDiceRollAlt(2, RandType, RandSeed, CoinFlipDict);
+ return CoinFlipValue;
+
 def RandomMultiCoinFlip(NumOfCoins=1, ReturnValType="int", RandType=1, RandSeed=random.seed()):
  CountNumOfCoins = 0;
  CoinFlipValue = [];
  while(CountNumOfCoins<NumOfCoins):
   CoinFlipValue = CoinFlipValue + RandomCoinFlip(ReturnValType, RandType, RandSeed);
+  CountNumOfCoins = CountNumOfCoins + 1;
+ return CoinFlipValue;
+
+def RandomMultiCoinFlipAlt(NumOfCoins=1, ReturnValType="int", RandType=1, RandSeed=random.seed()):
+ CountNumOfCoins = 0;
+ CoinFlipValue = [];
+ while(CountNumOfCoins<NumOfCoins):
+  CoinFlipValue = CoinFlipValue + RandomCoinFlipAlt(ReturnValType, RandType, RandSeed);
   CountNumOfCoins = CountNumOfCoins + 1;
  return CoinFlipValue;
