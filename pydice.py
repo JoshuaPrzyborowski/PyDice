@@ -10,10 +10,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2016-2020 Game Maker 2k - https://github.com/GameMaker2k
-    Copyright 2016-2020 Joshua Przyborowski - https://github.com/JoshuaPrzyborowski
+    Copyright 2016-2021 Game Maker 2k - https://github.com/GameMaker2k
+    Copyright 2016-2021 Joshua Przyborowski - https://github.com/JoshuaPrzyborowski
 
-    $FileInfo: pydice.py - Last Update: 12/30/2020 Ver. 0.3.0 RC 1 - Author: joshuatp $
+    $FileInfo: pydice.py - Last Update: 1/4/2021 Ver. 0.3.0 RC 1 - Author: joshuatp $
 '''
 
 from __future__ import division, absolute_import, print_function;
@@ -28,7 +28,7 @@ __program_name__ = "PyDice-Roll";
 __project__ = __program_name__;
 __project_url__ = "https://gist.github.com/JoshuaPrzyborowski";
 __version_info__ = (0, 3, 0, "RC 1", 1);
-__version_date_info__ = (2020, 12, 30, "RC 1", 1);
+__version_date_info__ = (2020, 1, 4, "RC 1", 1);
 __version_date__ = str(__version_date_info__[0])+"."+str(__version_date_info__[1]).zfill(2)+"."+str(__version_date_info__[2]).zfill(2);
 if(__version_info__[4]!=None):
  __version_date_plusrc__ = __version_date__+"-"+str(__version_date_info__[4]);
